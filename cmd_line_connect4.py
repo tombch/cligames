@@ -146,69 +146,83 @@ def minimax(disc, enemy_disc, moves_ahead, limit, computer_current_choice, human
                     
             return min(level)
         
-    
-def turn():
-    
-    p1_move = int(input("Player " + p1_disc + " - choose a column to place a disc in: ")) - 1
+
+def player_move(player_number, player_type):
+    player_disc = ""
+    opponent_disc = ""
+    if (player_number == 1):
+        player_disc = p1_disc
+        opponent_disc = p2_disc
+    else:
+        player_disc = p2_disc
+        opponent_disc = p1_disc
+    if (player_type == "human_player"):
+        move = int(input("Player " + player_disc + " - choose a column to place a disc in: ")) - 1
+    else:
+        print("Player " + player_disc + " is choosing...")
+        initial_time = time.time()
+        move = minimax(player_disc, opponent_disc, 0, 6, -100000, 100000)
+        decision_time = time.time() - initial_time
+        print("Decision time:", (decision_time), "seconds")
+    return move 
+
+
+def turn(p1_type, p2_type):
+    #Player 1 move
+    p1_move = player_move(1, p1_type)
     place_disc(p1_disc, p1_move, "game")    
     print_board()
     print("Player " + p1_disc + " chose column " + str(p1_move + 1) + ".")
     if state_scanner(p1_disc, p1_disc, p1_disc, p1_disc) > 0:
         print("Player " + p1_disc + " wins!")
-        return True
-    
-    print("Player " + p2_disc + " is choosing...")
-    initial_time = time.time()
-    p2_move = minimax(p2_disc, p1_disc, 0, 6, -100000, 100000)
-    decision_time = time.time() - initial_time    
-    place_disc(p2_disc, p2_move, "game")
-    print_board()
-    print("Player " + p2_disc + " chose column " + str(p2_move + 1) + ".")
-    print("Decision time:", (decision_time), "seconds")
-    if state_scanner(p2_disc, p2_disc, p2_disc, p2_disc) > 0:
-        print("Player " + p2_disc + " wins!")
-        return True
-    
-    return False
-
-
-def AI_game():  #AI game :D -currently uncalled function
-
-    print("Player " + p1_disc + " is choosing...")
-    p1_move = minimax(p1_disc, p2_disc, 0, 6, -100000, 100000)
-    place_disc(p1_disc, p1_move, "game")    
-    print_board()
-    print("Player " + p1_disc + " chose column " + str(p1_move + 1) + ".")
-    if state_scanner(p1_disc, p1_disc, p1_disc, p1_disc) > 0:
-        print("Player " + p1_disc + " wins!")
-        return True
-    
-    print("Player " + p2_disc + " is choosing...")    
-    p2_move = minimax(p2_disc, p1_disc, 0, 6, -100000, 100000)
+        return True  
+    #Player 2 move
+    p2_move = player_move(2, p2_type)
     place_disc(p2_disc, p2_move, "game")
     print_board()
     print("Player " + p2_disc + " chose column " + str(p2_move + 1) + ".")
     if state_scanner(p2_disc, p2_disc, p2_disc, p2_disc) > 0:
         print("Player " + p2_disc + " wins!")
         return True
-    
+    #End of turn
     return False
 
 
-def play_game():    
+def play_game(p1_type, p2_type):   
+    reset_board() 
     win = False
     print("A new game has been started.")
     print_board()
     while win != True:
-        win = turn()    
-    replay = input("Game Over. Enter 'N' here to play again (or enter any other key to quit): ")
-    if replay.upper() == "N":
-        reset_board()
-        play_game()
+        win = turn(p1_type, p2_type)    
+    replay = input("Game Over. Enter 'N' here to play again or any other key to go back to the menu: ")
+    if (replay.upper() == "N"):
+        play_game(p1_type, p2_type)
     else:
+        menu()
+
+
+def game_mode():    
+    choice = input("Enter your choice here: ")
+    if (choice == '1'):
+        play_game("human_player", "human_player")
+    elif (choice == '2'):
+        play_game("human_player", "computer_player")
+    elif (choice == '3'):
+        play_game("computer_player", "computer_player")
+    elif (choice == '4'):
         print("Your choice has been made. Quitting the game!")
         quit()
+    else:
+        print("Not a valid choice. Please try again.")
+        game_mode()
 
 
-print("LETS PLAY CONNECT4.")
-play_game()
+def menu():
+    print("LETS PLAY CONNECT4.")
+    print("Please choose one of the following game modes listed below."
+          "\n  1: Player vs Player\n  2: Player vs Computer\n  3: Computer vs Computer\n  4: Exit")
+    game_mode()
+
+
+menu()
