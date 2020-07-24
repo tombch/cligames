@@ -202,12 +202,23 @@ def play_game(p1_type, p2_type):
         menu()
 
 
+def x_or_o():
+    choice = input("Do you want to play as X or O against the computer? X will have the first move. Enter your choice here: ")
+    if (choice.upper() == 'X'):
+        play_game("human_player", "computer_player")
+    elif (choice.upper() == 'O'):
+        play_game("computer_player", "human_player")
+    else:
+        print("Not a valid choice. Please try again.")
+        x_or_o()
+
+
 def game_mode():    
     choice = input("Enter your choice here: ")
     if (choice == '1'):
         play_game("human_player", "human_player")
     elif (choice == '2'):
-        play_game("human_player", "computer_player")
+        x_or_o()
     elif (choice == '3'):
         play_game("computer_player", "computer_player")
     elif (choice == '4'):
