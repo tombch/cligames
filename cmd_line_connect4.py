@@ -85,19 +85,19 @@ def player_score(two_score, three_score, four_score, disc):
     player_score += two_score * state_scanner(disc, disc, " ", " ")
     player_score += two_score * state_scanner(disc, " ", disc, " ")
     player_score += two_score * state_scanner(disc, " ", " ", disc)
-    player_score += two_score * state_scanner(" ", disc, " ", disc)
-    player_score += two_score * state_scanner(" ", " ", disc, disc)
+    #player_score += two_score * state_scanner(" ", disc, " ", disc)
+    #player_score += two_score * state_scanner(" ", " ", disc, disc)
 
     player_score += three_score * state_scanner(disc, disc, disc, " ") 
     player_score += three_score * state_scanner(disc, disc, " ", disc) 
     player_score += three_score * state_scanner(disc, " ", disc, disc) 
-    player_score += three_score * state_scanner(" ", disc, disc, disc) 
+    #player_score += three_score * state_scanner(" ", disc, disc, disc) 
 
     player_score += four_score * state_scanner(disc, disc, disc, disc) 
     return player_score
     
 
-def board_state(): # issue with multiple weights not essential but would be more accurate
+def board_score(): # issue with multiple weights not essential but would be more accurate
     
     board_score = 0
     #2 in a row = 10/-5
@@ -114,7 +114,7 @@ def minimax(disc, enemy_disc, moves_ahead, limit, computer_current_choice, human
     level = []
 
     if ((state_scanner(disc, disc, disc, disc) > 0) or (state_scanner(enemy_disc, enemy_disc, enemy_disc, enemy_disc) > 0)) or (moves_ahead == limit):
-        return board_state()
+        return board_score()
 
     else:
         if (moves_ahead % 2) == 0:  #currently computer turn
@@ -160,32 +160,8 @@ def player_move(player_number, player_type):
         move = int(input("Player " + player_disc + " - choose a column to place a disc in: ")) - 1
     else:
         print("Player " + player_disc + " is choosing...")
-        initial_time = time.time()
         move = minimax(player_disc, opponent_disc, 0, 6, -100000, 100000)
-        decision_time = time.time() - initial_time
-        print("Decision time:", (decision_time), "seconds")
     return move 
-
-
-def turn(p1_type, p2_type):
-    #Player 1 move
-    p1_move = player_move(1, p1_type)
-    place_disc(p1_disc, p1_move, "game")    
-    print_board()
-    print("Player " + p1_disc + " chose column " + str(p1_move + 1) + ".")
-    if state_scanner(p1_disc, p1_disc, p1_disc, p1_disc) > 0:
-        print("Player " + p1_disc + " wins!")
-        return True  
-    #Player 2 move
-    p2_move = player_move(2, p2_type)
-    place_disc(p2_disc, p2_move, "game")
-    print_board()
-    print("Player " + p2_disc + " chose column " + str(p2_move + 1) + ".")
-    if state_scanner(p2_disc, p2_disc, p2_disc, p2_disc) > 0:
-        print("Player " + p2_disc + " wins!")
-        return True
-    #End of turn
-    return False
 
 
 def play_game(p1_type, p2_type):   
@@ -194,7 +170,28 @@ def play_game(p1_type, p2_type):
     print("A new game has been started.")
     print_board()
     while win != True:
-        win = turn(p1_type, p2_type)    
+        #Player 1 move
+        initial_time = time.time()
+        p1_move = player_move(1, p1_type)
+        decision_time = time.time() - initial_time
+        place_disc(p1_disc, p1_move, "game")    
+        print_board()
+        print("Player " + p1_disc + " chose column " + str(p1_move + 1) + ".")
+        print("Decision time:", (decision_time), "seconds")
+        if state_scanner(p1_disc, p1_disc, p1_disc, p1_disc) > 0:
+            print("Player " + p1_disc + " wins!")
+            win = True  
+        #Player 2 move
+        initial_time = time.time()
+        p2_move = player_move(2, p2_type)
+        decision_time = time.time() - initial_time
+        place_disc(p2_disc, p2_move, "game")
+        print_board()
+        print("Player " + p2_disc + " chose column " + str(p2_move + 1) + ".")
+        print("Decision time:", (decision_time), "seconds")
+        if state_scanner(p2_disc, p2_disc, p2_disc, p2_disc) > 0:
+            print("Player " + p2_disc + " wins!")
+            win = True
     replay = input("Game Over. Enter 'N' here to play again or any other key to go back to the menu: ")
     if (replay.upper() == "N"):
         play_game(p1_type, p2_type)
@@ -202,30 +199,26 @@ def play_game(p1_type, p2_type):
         menu()
 
 
-def x_or_o():
-    choice = input("Do you want to play as X or O against the computer? X will have the first move. Enter your choice here: ")
-    if (choice.upper() == 'X'):
-        play_game("human_player", "computer_player")
-    elif (choice.upper() == 'O'):
-        play_game("computer_player", "human_player")
-    else:
-        print("Not a valid choice. Please try again.")
-        x_or_o()
-
-
 def game_mode():    
-    choice = input("Enter your choice here: ")
+    choice = input("Enter your choice of game mode here: ")
     if (choice == '1'):
         play_game("human_player", "human_player")
     elif (choice == '2'):
-        x_or_o()
+        choice = input("Do you want to play as X or O against the computer? X will have the first move. Enter your choice here: ")
+        if (choice.upper() == 'X'):
+            play_game("human_player", "computer_player")
+        elif (choice.upper() == 'O'):
+            play_game("computer_player", "human_player")
+        else:
+            print("Not a valid choice.")
+            game_mode()
     elif (choice == '3'):
         play_game("computer_player", "computer_player")
     elif (choice == '4'):
         print("Your choice has been made. Quitting the game!")
         quit()
     else:
-        print("Not a valid choice. Please try again.")
+        print("Not a valid choice.")
         game_mode()
 
 
