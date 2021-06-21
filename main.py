@@ -1,8 +1,10 @@
 import time
 import connect4_board
+import tictactoe_board
 import player
 
 board = connect4_board.Connect4Board()
+board2 = tictactoe_board.TicTacToeBoard()
 
 def play_game(playerX, playerO):
     board.reset_board()
@@ -18,7 +20,9 @@ def play_game(playerX, playerO):
         board.print_board()
         print("Player " + playerX.disc + " chose column " + str(playerX_move + 1) + ".")
         print("Decision time:", (decision_time), "seconds")
-        win = board.check_for_win(playerX)
+        if board.check_for_win(playerX.disc):
+            print("Player " + playerX.disc + " wins!")
+            win = True
         #Player 2 turn
         initial_time = time.time()
         playerO_move = playerO.move(board)
@@ -27,7 +31,9 @@ def play_game(playerX, playerO):
         board.print_board()
         print("Player " + playerO.disc + " chose column " + str(playerO_move + 1) + ".")
         print("Decision time:", (decision_time), "seconds")
-        win = board.check_for_win(playerO)
+        if board.check_for_win(playerO.disc):
+            print("Player " + playerO.disc + " wins!")
+            win = True
     replay = input("Game Over. Enter 'N' here to play again or any other key to go back to the menu: ")
     if replay.upper() == "N":
         play_game(playerX, playerO)

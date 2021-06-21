@@ -9,6 +9,7 @@ class Connect4Board:
                  [" ", " ", " ", " ", " ", " "]] #column 7
         self.column_number = len(self.b) #7
         self.row_number = len(self.b[0]) #6
+        self.num_diff_moves = 7
 
     def print_board(self):
         print("|---|---|---|---|---|---|---|\n"
@@ -98,9 +99,8 @@ class Connect4Board:
         player_score += four_score * self.state_scanner(disc, disc, disc, disc) 
         return player_score
 
-    def check_for_win(self, player):
-        if self.state_scanner(player.disc, player.disc, player.disc, player.disc) > 0:
-            print("Player " + player.disc + " wins!")
+    def check_for_win(self, player_disc):
+        if self.state_scanner(player_disc, player_disc, player_disc, player_disc) > 0:
             return True
         else:
             return False
