@@ -7,8 +7,8 @@ class Connect4Board:
                  [" ", " ", " ", " ", " ", " "], #column 5
                  [" ", " ", " ", " ", " ", " "], #column 6
                  [" ", " ", " ", " ", " ", " "]] #column 7
-        self.column_number = len(self.b) #7
-        self.row_number = len(self.b[0]) #6
+        self.column_number = len(self.b)
+        self.row_number = len(self.b[0])
         self.moves = [0, 1, 2, 3, 4, 5, 6]
 
     def print_board(self):
@@ -45,7 +45,7 @@ class Connect4Board:
                 self.b[column][i] = disc
                 return
         if situation == "game":
-            retry_column = int(input("This column is full. Please choose a different one: ")) - 1
+            retry_column = int(input("This column is full. Please choose a different one: "))
             self.place_disc(disc, retry_column, "game")
         else:
             return "full"

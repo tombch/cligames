@@ -3,17 +3,17 @@ class TictactoeBoard:
         self.b = [[" ", " ", " "],
                  [" ", " ", " "],
                  [" ", " ", " "]]    
-        self.column_number = len(self.b) #3
-        self.row_number = len(self.b[0]) #3   
+        self.column_number = len(self.b)
+        self.row_number = len(self.b[0])   
         self.moves = ["00", "01", "02", "10", "11", "12", "20", "21", "22"]
 
     def print_board(self):  
         print("  |---|---|---|\n"
-            "0 | " + self.b[0][0] + " | " + self.b[0][1] + " | " + self.b[0][2] + " | \n"
+            "2 | " + self.b[0][2] + " | " + self.b[1][2] + " | " + self.b[2][2] + " | \n"
             "  |---|---|---|\n"
-            "1 | " + self.b[1][0] + " | " + self.b[1][1] + " | " + self.b[1][2] + " | \n"
+            "1 | " + self.b[0][1] + " | " + self.b[1][1] + " | " + self.b[2][1] + " | \n"
             "  |---|---|---|\n"
-            "2 | " + self.b[2][0] + " | " + self.b[2][1] + " | " + self.b[2][2] + " | \n"
+            "0 | " + self.b[0][0] + " | " + self.b[1][0] + " | " + self.b[2][0] + " | \n"
             "  |---|---|---|\n"
             "    0   1   2 \n")
 
@@ -49,7 +49,7 @@ class TictactoeBoard:
             self.b[position0][position1] = " "
             return
 
-    def state_scanner(self, disc1, disc2, disc3, disc4):
+    def state_scanner(self, disc1, disc2, disc3):
         score = 0
         #east scan    
         for j in range(0, self.row_number):
@@ -69,17 +69,17 @@ class TictactoeBoard:
 
     def player_score(self, two_score, three_score, four_score, disc):
         player_score = 0
-        player_score += two_score * self.state_scanner(disc, " ", " ", " ")
-        player_score += two_score * self.state_scanner(" ", disc, " ", " ")
-        player_score += two_score * self.state_scanner(" ", " ", disc, " ")
-        player_score += three_score * self.state_scanner(disc, disc, " ", " ")
-        player_score += three_score * self.state_scanner(disc, " ", disc, " ")
-        player_score += three_score * self.state_scanner(" ", disc, disc, " ")
-        player_score += four_score * self.state_scanner(disc, disc, disc, " ")
+        player_score += two_score * self.state_scanner(disc, " ", " ")
+        player_score += two_score * self.state_scanner(" ", disc, " ")
+        player_score += two_score * self.state_scanner(" ", " ", disc)
+        player_score += three_score * self.state_scanner(disc, disc, " ")
+        player_score += three_score * self.state_scanner(disc, " ", disc)
+        player_score += three_score * self.state_scanner(" ", disc, disc)
+        player_score += four_score * self.state_scanner(disc, disc, disc)
         return player_score
 
     def check_for_win(self, player_disc):
-        if self.state_scanner(player_disc, player_disc, player_disc, " ") > 0:
+        if self.state_scanner(player_disc, player_disc, player_disc) > 0:
             return True
         else:
             return False
