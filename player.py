@@ -10,6 +10,13 @@ class Player:
     def move(self, board):
         if (self.player_type == "human"):
             move = input("Player " + self.disc + " - choose a move: ")
+            invalid_move = True
+            while(invalid_move):
+                for i in board.moves:
+                    if move == str(i):
+                        invalid_move = False
+                if invalid_move == True:
+                    move = input("Not a valid move. Choose again: ")
         else:
             print("Player " + self.disc + " is choosing...")
             move = self.minimax(board, 0, 6, -100000000, 100000000) 

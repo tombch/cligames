@@ -67,15 +67,15 @@ class TictactoeBoard:
             score += 1
         return score
 
-    def player_score(self, two_score, three_score, four_score, disc):
+    def player_score(self, one_score, two_score, three_score, disc):
         player_score = 0
-        player_score += two_score * self.state_scanner(disc, " ", " ")
-        player_score += two_score * self.state_scanner(" ", disc, " ")
-        player_score += two_score * self.state_scanner(" ", " ", disc)
-        player_score += three_score * self.state_scanner(disc, disc, " ")
-        player_score += three_score * self.state_scanner(disc, " ", disc)
-        player_score += three_score * self.state_scanner(" ", disc, disc)
-        player_score += four_score * self.state_scanner(disc, disc, disc)
+        player_score += one_score * self.state_scanner(disc, " ", " ")
+        player_score += one_score * self.state_scanner(" ", disc, " ")
+        player_score += one_score * self.state_scanner(" ", " ", disc)
+        player_score += two_score * self.state_scanner(disc, disc, " ")
+        player_score += two_score * self.state_scanner(disc, " ", disc)
+        player_score += two_score * self.state_scanner(" ", disc, disc)
+        player_score += three_score * self.state_scanner(disc, disc, disc)
         return player_score
 
     def check_for_win(self, player_disc):
