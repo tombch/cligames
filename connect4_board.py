@@ -9,7 +9,7 @@ class Connect4Board:
                  [" ", " ", " ", " ", " ", " "]] #column 7
         self.column_number = len(self.b) #7
         self.row_number = len(self.b[0]) #6
-        self.num_diff_moves = 7
+        self.moves = [0, 1, 2, 3, 4, 5, 6]
 
     def print_board(self):
         print("|---|---|---|---|---|---|---|\n"
@@ -25,7 +25,7 @@ class Connect4Board:
             "|---|---|---|---|---|---|---|\n"
             "| " + self.b[0][0] + " | " + self.b[1][0] + " | " + self.b[2][0] + " | " + self.b[3][0] + " | " + self.b[4][0] + " | " + self.b[5][0] + " | " + self.b[6][0] +" |\n"
             "|---|---|---|---|---|---|---|\n"
-            "  1   2   3   4   5   6   7  \n")
+            "  0   1   2   3   4   5   6  \n")
 
     def board_full(self):
         for i in range (0, self.column_number):
@@ -39,6 +39,7 @@ class Connect4Board:
                 self.b[i][j] = " "
 
     def place_disc(self, disc, column, situation):
+        column = int(column)
         for i in range(0, len(self.b[column])):
             if self.b[column][i] == " ":
                 self.b[column][i] = disc
@@ -50,6 +51,7 @@ class Connect4Board:
             return "full"
 
     def remove_disc(self, disc, column):
+        column = int(column)
         #loops backwards from top of column down to bottom
         for i in range(len(self.b[column]) - 1, -1, -1): 
             if self.b[column][i] == disc:

@@ -9,10 +9,10 @@ class Player:
     
     def move(self, board):
         if (self.player_type == "human"):
-            move = int(input("Player " + self.disc + " - choose a column to place a disc in: ")) - 1
+            move = input("Player " + self.disc + " - choose a move: ")
         else:
             print("Player " + self.disc + " is choosing...")
-            move = self.minimax(board, self.disc, self.opponent_disc, 0, 6, -100000000, 100000000) 
+            move = self.minimax(board, 0, 6, -100000000, 100000000) 
         return move 
 
     def minimax(self, board, current_depth, max_depth, alpha, beta):
@@ -24,7 +24,7 @@ class Player:
             return board_score    
         if (current_depth % 2 == 0):
             best_val = -100000000
-            for i in range(0, board.num_diff_moves):
+            for i in board.moves:
                 if (board.place_disc(self.disc, i, "simulation") != "full"):
                     current_val = self.minimax(board, current_depth + 1, max_depth, alpha, beta)
                     best_val = max(best_val, current_val)
@@ -39,11 +39,11 @@ class Player:
             if (current_depth != 0):
                 return best_val
             else:
-                chosen_move = level.index(max(level))
+                chosen_move = board.moves[level.index(max(level))]
                 return chosen_move   
         else:
             best_val = 100000000
-            for i in range(0, board.num_diff_moves):
+            for i in board.moves:
                 if (board.place_disc(self.opponent_disc, i, "simulation") != "full"):
                     current_val = self.minimax(board, current_depth + 1, max_depth, alpha, beta)
                     best_val = min(best_val, current_val)
