@@ -8,37 +8,29 @@ def play_game(player_X, player_O, board):
     winner = ""
     print("A new game has been started.")
     board.print_board()   
+    current_player = player_X
     while winner == "":
-        #Player 1 turn
         initial_time = time.time()
-        player_X_move = player_X.move(board)
+        current_player_move = current_player.move(board)
         decision_time = time.time() - initial_time
-        board.place_disc(player_X.disc, player_X_move, "game")    
+        board.place_disc(current_player.disc, current_player_move, "game")    
         board.print_board()
-        print("Player X chose move " + str(player_X_move) + ".")
+        print("Player " + current_player.disc + " chose move " + str(current_player_move) + ".")
         print("Decision time:", (decision_time), "seconds")
-        if board.check_for_win(player_X.disc):
-            winner = "X"
+        if board.check_for_win(current_player.disc):
+            winner = current_player.disc
         elif board.board_full():
             winner = "draw"
         else:
-            #Player 2 turn
-            initial_time = time.time()
-            player_O_move = player_O.move(board)
-            decision_time = time.time() - initial_time
-            board.place_disc(player_O.disc, player_O_move, "game")
-            board.print_board()
-            print("Player O chose move " + str(player_O_move) + ".")
-            print("Decision time:", (decision_time), "seconds")
-            if board.check_for_win(player_O.disc):
-                winner = "O"
-            elif board.board_full():
-                winner = "draw"
+            if current_player == player_X:
+                current_player = player_O
+            else:
+                current_player = player_X
     if winner == "draw":
         print("Game ended in a draw.")
     else:
         print("Player " + winner + " wins! Game Over.")
-    replay = input("Enter 'N' here to play again or any other key to go back to the menu: ")
+    replay = input("Enter 'N' here to play again or any other key to go back to the menu: ") #change to just going BACK
     if replay.upper() == "N":
         play_game(player_X, player_O, board)
     else:
@@ -94,3 +86,4 @@ def menu():
             print("Not a valid choice.")
 
 menu()
+
