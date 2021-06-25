@@ -3,6 +3,17 @@ import connect4_board
 import tictactoe_board
 import player
 
+def custom_quit():
+    print("Quitting the program.")
+    quit()
+
+def invalid_choice():
+    print("Not a valid choice.")
+
+def choose_replay_options():
+        print("Please choose one of the following options listed below."
+        "\n  1: Play again\n  2: Change who plays the game\n  3: Choose a different game\n  4: Exit")
+
 def play_game(player_X, player_O, board):
     board.reset_board()
     winner = ""
@@ -30,60 +41,86 @@ def play_game(player_X, player_O, board):
         print("Game ended in a draw.")
     else:
         print("Player " + winner + " wins! Game Over.")
-    replay = input("Enter 'N' here to play again or any other key to go back to the menu: ") #change to just going BACK
-    if replay.upper() == "N":
-        play_game(player_X, player_O, board)
-    else:
-        menu()
+    choose_replay_options()
+    choosing_replay = True
+    while choosing_replay:
+        replay_choice = input("Enter your choice here: ")
+        if replay_choice == '1':
+            play_game(player_X, player_O, board)
+        elif replay_choice == '2':
+            choosing_replay = False
+        elif replay_choice == '3':
+            choose_game()
+        elif replay_choice == '4':
+            custom_quit()
+        else:
+            invalid_choice()
+    
+def choose_piece():
+    choosing_piece = True
+    piece_choice = ""
+    while choosing_piece:
+        piece_choice = input("Do you want to play as X or O against the computer? X has the first move. Enter your choice here: ")
+        if piece_choice.upper() == 'X' or piece_choice.upper() == 'O':
+            choosing_piece = False
+        else:
+            invalid_choice()
+    return piece_choice
 
-def menu():
-    print("Welcome to Command Line Board Games.") 
-    print("Please choose one of the following games listed below."
-          "\n  1: Connect4\n  2: Tic-tac-toe\n  3: Exit")
+def choose_mode_options():
+    print("Please choose one of the following options listed below."
+    "\n  1: Player vs Player\n  2: Player vs Computer\n  3: Computer vs Computer\n  4: Choose a different game\n  5: Exit")
+
+def choose_mode(board):
+    choose_mode_options()
+    choosing_mode = True
+    while choosing_mode:
+        mode_choice = input("Enter your choice here: ")
+        if mode_choice == '1':
+            play_game(player.Player("human", "X"), player.Player("human", "O"), board)
+            choose_mode_options()
+        elif mode_choice == '2':
+            chosen_piece = choose_piece()
+            if chosen_piece.upper() == 'X':
+                play_game(player.Player("human", "X"), player.Player("computer", "O"), board)
+                choose_mode_options()
+            elif chosen_piece.upper() == 'O':
+                play_game(player.Player("computer", "X"), player.Player("human", "O"), board)
+                choose_mode_options()
+        elif mode_choice == '3':
+            play_game(player.Player("computer", "X"), player.Player("computer", "O"), board)
+            choose_mode_options()
+        elif mode_choice == '4':
+            choosing_mode = False
+        elif mode_choice == '5':
+            custom_quit()
+        else:
+            invalid_choice()
+
+def choose_game_options():
+    print("Please choose one of the following options listed below."
+    "\n  1: Connect4\n  2: Tic-tac-toe\n  3: Exit")
+
+def choose_game():   
+    choose_game_options()
     choosing_game = True
-    while (choosing_game):
-        game_choice = input("Enter your choice of game here: ")
+    while choosing_game:
+        game_choice = input("Enter your choice here: ")
         if game_choice == '1':
             print("LETS PLAY CONNECT4.")
             board = connect4_board.Connect4Board()
-            choosing_game = False
+            choose_mode(board)
+            choose_game_options()
         elif game_choice == '2':
             print("LETS PLAY TIC-TAC-TOE.")
             board = tictactoe_board.TictactoeBoard()
-            choosing_game = False
+            choose_mode(board)
+            choose_game_options()
         elif game_choice == '3':
-            print("Quitting the program.")
-            quit()
+            choosing_game = False
         else:
-            print("Not a valid choice.")  
-    print("Please choose one of the following game modes listed below."
-          "\n  1: Player vs Player\n  2: Player vs Computer\n  3: Computer vs Computer\n  4: Back")
-    choosing_mode = True
-    while(choosing_mode):
-        mode_choice = input("Enter your choice of game mode here: ")
-        if mode_choice == '1':
-            play_game(player.Player("human", "X"), player.Player("human", "O"), board)
-            choosing_mode = False
-        elif mode_choice == '2':
-            choosing_piece = True
-            while(choosing_piece):
-                piece_choice = input("Do you want to play as X or O against the computer? X has the first move. Enter your choice here: ")
-                if piece_choice.upper() == 'X':
-                    play_game(player.Player("human", "X"), player.Player("computer", "O"), board)
-                    choosing_piece = False
-                elif piece_choice.upper() == 'O':
-                    play_game(player.Player("computer", "X"), player.Player("human", "O"), board)
-                    choosing_piece = False
-                else:
-                    print("Not a valid choice.")
-            choosing_mode = False
-        elif mode_choice == '3':
-            play_game(player.Player("computer", "X"), player.Player("computer", "O"), board)
-            choosing_mode = False
-        elif mode_choice == '4':
-            menu()
-        else:
-            print("Not a valid choice.")
+            invalid_choice()
+    custom_quit()
 
-menu()
-
+print("Welcome to Command Line Board Games.") 
+choose_game()
