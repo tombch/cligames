@@ -45,7 +45,7 @@ class TictactoeBoard:
     def remove_disc(self, disc, position):
         position0 = int(position[0])
         position1 = int(position[1])
-        if self.b[position0][position1]== disc:
+        if self.b[position0][position1] == disc:
             self.b[position0][position1] = " "
             return
 

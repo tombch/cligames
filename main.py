@@ -122,5 +122,9 @@ def choose_game():
             invalid_choice()
     custom_quit()
 
-print("Welcome to Command Line Board Games.") 
-choose_game()
+def main():
+    print("Welcome to Command Line Board Games.") 
+    choose_game()
+
+if __name__ == '__main__':
+    main()
