@@ -5,4 +5,4 @@ The implementation of the minimax algorithm is contained within the Player class
 The program is started by running the main.py file. 
 ## How to play
 * To make a move in Tic-tac-toe, input 'xy' when prompted, where 'x' and 'y' are the x and y coordinates of a square on the board.
-* To make a move in Connect4, enter 'x' where 'x' is the index of the column you wish to make a move in.
+* To make a move in Connect4, enter 'x' when prompted, where 'x' is the index of the column you wish to make a move in.
