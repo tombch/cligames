@@ -1,11 +1,12 @@
-# Connect4 and Tic-tac-toe on the Command Line
+# Connect4 and Tic-tac-toe in the terminal
 Text-based versions of Connect4 and Tic-tac-toe.
 
-The program contains an implementation of the minimax algorithm (with alpha–beta pruning) for the user to play against, or the user can choose to pit the algorithm against itself.
+The program also contains a computer player, implemented using the minimax algorithm (with alpha–beta pruning).
 
-The implementation of the minimax algorithm is contained within the Player class, and is written such that it can play any board games that follow the same structure as the Connect4Board and TictactoeBoard classes.
+Each board game can be played as human against human, human against computer or computer against computer.
 
-The program is started by running `python main.py`. 
+The program is started by running `python main.py`.
+
 ## How to play
 #### Tic-tac-toe
 To make a move in Tic-tac-toe, input `(x, y)` when prompted, where `x` and `y` are the x and y coordinates of a square on the board.
