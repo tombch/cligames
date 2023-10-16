@@ -49,7 +49,7 @@ class TictactoeBoard:
         if situation == 'game':
             unparsed_move = input('This position is taken. Please choose a different one: ').strip()
             move = self.parse_move(unparsed_move)
-            while not move:
+            while move is None:
                 unparsed_move = input('Not a valid move. Choose again: ').strip()
                 move = self.parse_move(unparsed_move)
             self.place_disc(disc, move, 'game')

@@ -52,7 +52,7 @@ class Connect4Board:
         if situation == 'game':
             unparsed_move = input('This column is full. Please choose a different one: ').strip()
             move = self.parse_move(unparsed_move)
-            while not move:
+            while move is None:
                 unparsed_move = input('Not a valid move. Choose again: ').strip()
                 move = self.parse_move(unparsed_move)
             self.place_disc(disc, move, 'game')

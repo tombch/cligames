@@ -12,7 +12,7 @@ class Player:
         if self.player_type == 'human':
             unparsed_move = input('Player ' + self.disc + ' - choose a move: ').strip()
             move = board.parse_move(unparsed_move)
-            while not move:
+            while move is None:
                 unparsed_move = input('Not a valid move. Choose again: ').strip()
                 move = board.parse_move(unparsed_move)
         else:
