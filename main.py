@@ -47,7 +47,7 @@ def play_game(player_X, player_O, board):
         board.place_disc(current_player.disc, current_player_move, 'game')    
         board.print_board()
         print(f'Player {current_player.disc} chose move {current_player_move}.')
-        print(f'Decision time: {end - start} seconds')
+        print(f'Decision time: {round(end - start, 3)} seconds')
         if board.check_for_win(current_player.disc):
             winner = current_player.disc
         elif board.board_full():
