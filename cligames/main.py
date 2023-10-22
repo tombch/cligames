@@ -1,7 +1,5 @@
 from timeit import default_timer as timer
-import connect4_board
-import tictactoe_board
-import player
+from . import boards, players
 
 
 messages = {"invalid": "Not a valid choice.", "quit": "Exiting the program."}
@@ -68,13 +66,15 @@ def choose_piece(board, display_options=True):
         print(
             f"Do you want to play as {board.disc_1} or {board.disc_2} against the computer? {board.disc_1} has the first move."
         )
-    choosing_piece = True
-    while choosing_piece:
+
+    choice = None
+    while choice is None:
         choice = input("Enter your choice here: ").strip().upper()
-        if choice == board.disc_1 or choice == board.disc_2:
-            choosing_piece = False
-        else:
+
+        if choice not in [board.disc_1, board.disc_2]:
+            choice = None
             print(messages["invalid"])
+
     return choice
 
 
@@ -88,8 +88,8 @@ def choose_player_mode(board, display_options=True):
     # Human vs Human
     if choice == "1":
         play_game(
-            player.Player("human", board.disc_1, board.disc_2),
-            player.Player("human", board.disc_2, board.disc_1),
+            players.Human(board.disc_1, board.disc_2),
+            players.Human(board.disc_2, board.disc_1),
             board,
         )
     # Human vs Computer
@@ -97,21 +97,21 @@ def choose_player_mode(board, display_options=True):
         chosen_piece = choose_piece(board)
         if chosen_piece.upper() == board.disc_1:
             play_game(
-                player.Player("human", board.disc_1, board.disc_2),
-                player.Player("computer", board.disc_2, board.disc_1),
+                players.Human(board.disc_1, board.disc_2),
+                players.Computer(board.disc_2, board.disc_1),
                 board,
             )
         elif chosen_piece.upper() == board.disc_2:
             play_game(
-                player.Player("computer", board.disc_1, board.disc_2),
-                player.Player("human", board.disc_2, board.disc_1),
+                players.Computer(board.disc_1, board.disc_2),
+                players.Human(board.disc_2, board.disc_1),
                 board,
             )
     # Robot wars
     elif choice == "3":
         play_game(
-            player.Player("computer", board.disc_1, board.disc_2),
-            player.Player("computer", board.disc_2, board.disc_1),
+            players.Computer(board.disc_1, board.disc_2),
+            players.Computer(board.disc_2, board.disc_1),
             board,
         )
     # Different game
@@ -135,12 +135,12 @@ def choose_game(display_options=True):
     # Connect4
     if choice == "1":
         print("LETS PLAY CONNECT4.")
-        board = connect4_board.Connect4Board()
+        board = boards.Connect4()
         choose_player_mode(board)
     # Tic-tac-toe
     elif choice == "2":
         print("LETS PLAY TIC-TAC-TOE.")
-        board = tictactoe_board.TictactoeBoard()
+        board = boards.Tictactoe()
         choose_player_mode(board)
     # Quit program
     elif choice == "3":
@@ -152,10 +152,6 @@ def choose_game(display_options=True):
         choose_game(display_options=False)
 
 
-def main():
+def run():
     print("Welcome to Command Line Board Games.")
     choose_game()
-
-
-if __name__ == "__main__":
-    main()

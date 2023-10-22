@@ -1,4 +1,7 @@
-class Connect4Board:
+from .board import Board
+
+
+class Connect4(Board):
     def __init__(self):
         self.num_rows = 6
         self.num_columns = 7

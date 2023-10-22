@@ -1,4 +1,7 @@
-class TictactoeBoard:
+from .board import Board
+
+
+class Tictactoe(Board):
     def __init__(self):
         self.num_rows = 3
         self.num_columns = 3
