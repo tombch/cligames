@@ -1,24 +1,13 @@
-import collections
 import math
+import collections
+from .player import Player
 
 
-class Player:
-    def __init__(self, player_type, disc, opponent_disc):
-        self.player_type = player_type
-        self.disc = disc
-        self.opponent_disc = opponent_disc
-
+class Computer(Player):
     def move(self, board):
-        if self.player_type == "human":
-            unparsed_move = input("Player " + self.disc + " - choose a move: ").strip()
-            move = board.parse_move(unparsed_move)
-            while move is None:
-                unparsed_move = input("Not a valid move. Choose again: ").strip()
-                move = board.parse_move(unparsed_move)
-        else:
-            print("Player " + self.disc + " is choosing...", end=" ", flush=True)
-            move = self.minimax(board, 0, 6, -math.inf, math.inf)
-            print("")
+        print("Player " + self.disc + " is choosing...", end=" ", flush=True)
+        move = self.minimax(board, 0, 6, -math.inf, math.inf)
+        print("")
         return move
 
     def minimax(self, board, current_depth, max_depth, alpha, beta):
