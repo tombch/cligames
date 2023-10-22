@@ -1,4 +1,4 @@
-# `cligames`
+# `cligames`
 
 ## Connect4 and Tic-tac-toe in the terminal
 Text-based versions of Connect4 and Tic-tac-toe.
