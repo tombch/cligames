@@ -1,123 +1,35 @@
+from rich.console import Console
+from rich.table import Table
 from .board import Board
+
+console = Console()
 
 
 class Connect4(Board):
+    NUM_ROWS = 6
+    NUM_COLUMNS = 7
+    MOVES = [0, 1, 2, 3, 4, 5, 6]
+    PIECE_1 = "[bold red]X[/bold red]"
+    PIECE_2 = "[bold cyan]O[/bold cyan]"
+    __slots__ = "b"
+
     def __init__(self):
-        self.num_rows = 6
-        self.num_columns = 7
-        self.b = [
-            [" " for row in range(self.num_rows)] for column in range(self.num_columns)
-        ]
-        self.moves = [0, 1, 2, 3, 4, 5, 6]
-        self.disc_1 = "X"
-        self.disc_2 = "O"
+        self.b = [[" " for _ in range(self.NUM_ROWS)] for _ in range(self.NUM_COLUMNS)]
 
     def print_board(self):
-        print(
-            "|---|---|---|---|---|---|---|\n"
-            "| "
-            + self.b[0][5]
-            + " | "
-            + self.b[1][5]
-            + " | "
-            + self.b[2][5]
-            + " | "
-            + self.b[3][5]
-            + " | "
-            + self.b[4][5]
-            + " | "
-            + self.b[5][5]
-            + " | "
-            + self.b[6][5]
-            + " |\n"
-            "|---|---|---|---|---|---|---|\n"
-            "| "
-            + self.b[0][4]
-            + " | "
-            + self.b[1][4]
-            + " | "
-            + self.b[2][4]
-            + " | "
-            + self.b[3][4]
-            + " | "
-            + self.b[4][4]
-            + " | "
-            + self.b[5][4]
-            + " | "
-            + self.b[6][4]
-            + " |\n"
-            "|---|---|---|---|---|---|---|\n"
-            "| "
-            + self.b[0][3]
-            + " | "
-            + self.b[1][3]
-            + " | "
-            + self.b[2][3]
-            + " | "
-            + self.b[3][3]
-            + " | "
-            + self.b[4][3]
-            + " | "
-            + self.b[5][3]
-            + " | "
-            + self.b[6][3]
-            + " |\n"
-            "|---|---|---|---|---|---|---|\n"
-            "| "
-            + self.b[0][2]
-            + " | "
-            + self.b[1][2]
-            + " | "
-            + self.b[2][2]
-            + " | "
-            + self.b[3][2]
-            + " | "
-            + self.b[4][2]
-            + " | "
-            + self.b[5][2]
-            + " | "
-            + self.b[6][2]
-            + " |\n"
-            "|---|---|---|---|---|---|---|\n"
-            "| "
-            + self.b[0][1]
-            + " | "
-            + self.b[1][1]
-            + " | "
-            + self.b[2][1]
-            + " | "
-            + self.b[3][1]
-            + " | "
-            + self.b[4][1]
-            + " | "
-            + self.b[5][1]
-            + " | "
-            + self.b[6][1]
-            + " |\n"
-            "|---|---|---|---|---|---|---|\n"
-            "| "
-            + self.b[0][0]
-            + " | "
-            + self.b[1][0]
-            + " | "
-            + self.b[2][0]
-            + " | "
-            + self.b[3][0]
-            + " | "
-            + self.b[4][0]
-            + " | "
-            + self.b[5][0]
-            + " | "
-            + self.b[6][0]
-            + " |\n"
-            "|---|---|---|---|---|---|---|\n"
-            "  0   1   2   3   4   5   6  \n"
-        )
+        table = Table(show_lines=True, show_header=False, show_footer=True)
+        for i in range(self.NUM_COLUMNS):
+            table.add_column(footer=f"[dim]{str(i)}[/dim]")
+
+        for j in range(self.NUM_ROWS - 1, -1, -1):
+            table.add_row(*(str(self.b[i][j]) for i in range(self.NUM_COLUMNS)))
+
+        console.print(table)
 
     def parse_move(self, unparsed_move):
         try:
             player_move = int(unparsed_move.strip())
-            for move in self.moves:
+            for move in self.MOVES:
                 if player_move == move:
                     return player_move
             return None
@@ -125,20 +37,20 @@ class Connect4(Board):
             return None
 
     def board_full(self):
-        for i in range(0, self.num_columns):
+        for i in range(0, self.NUM_COLUMNS):
             if self.b[i][len(self.b[0]) - 1] == " ":
                 return False
         return True
 
     def reset_board(self):
-        for i in range(0, self.num_columns):
-            for j in range(0, self.num_rows):
+        for i in range(0, self.NUM_COLUMNS):
+            for j in range(0, self.NUM_ROWS):
                 self.b[i][j] = " "
 
-    def place_disc(self, disc, column, situation):
-        for i in range(0, self.num_rows):
-            if self.b[column][i] == " ":
-                self.b[column][i] = disc
+    def place_piece(self, piece, position, situation):
+        for i in range(0, self.NUM_ROWS):
+            if self.b[position][i] == " ":
+                self.b[position][i] = piece
                 return
         if situation == "game":
             unparsed_move = input(
@@ -148,82 +60,85 @@ class Connect4(Board):
             while move is None:
                 unparsed_move = input("Not a valid move. Choose again: ").strip()
                 move = self.parse_move(unparsed_move)
-            self.place_disc(disc, move, "game")
+            self.place_piece(piece, move, "game")
         else:
             return "full"
 
-    def remove_disc(self, disc, column):
+    def remove_piece(self, piece, position):
         # loops backwards from top of column down to bottom
-        for i in range(self.num_rows - 1, -1, -1):
-            if self.b[column][i] == disc:
-                self.b[column][i] = " "
+        for i in range(self.NUM_ROWS - 1, -1, -1):
+            if self.b[position][i] == piece:
+                self.b[position][i] = " "
                 return
 
-    def state_scanner(self, disc1, disc2, disc3, disc4):
+    def state_scanner(self, piece1, piece2, piece3, piece4):
         score = 0
         # east scan
-        for i in range(0, self.num_columns - 3):  # [0 - 3]
-            for j in range(0, self.num_rows):  # [0 - 5]
+        for i in range(0, self.NUM_COLUMNS - 3):  # [0 - 3]
+            for j in range(0, self.NUM_ROWS):  # [0 - 5]
                 if (
-                    (self.b[i][j] == disc1)
-                    and (self.b[i + 1][j] == disc2)
-                    and (self.b[i + 2][j] == disc3)
-                    and (self.b[i + 3][j] == disc4)
+                    (self.b[i][j] == piece1)
+                    and (self.b[i + 1][j] == piece2)
+                    and (self.b[i + 2][j] == piece3)
+                    and (self.b[i + 3][j] == piece4)
                 ):
                     score += 1
         # north scan
-        for i in range(0, self.num_columns):
-            for j in range(0, self.num_rows - 3):
+        for i in range(0, self.NUM_COLUMNS):
+            for j in range(0, self.NUM_ROWS - 3):
                 if (
-                    (self.b[i][j] == disc1)
-                    and (self.b[i][j + 1] == disc2)
-                    and (self.b[i][j + 2] == disc3)
-                    and (self.b[i][j + 3] == disc4)
+                    (self.b[i][j] == piece1)
+                    and (self.b[i][j + 1] == piece2)
+                    and (self.b[i][j + 2] == piece3)
+                    and (self.b[i][j + 3] == piece4)
                 ):
                     score += 1
         # north east scan
-        for i in range(0, self.num_columns - 3):
-            for j in range(0, self.num_rows - 3):
+        for i in range(0, self.NUM_COLUMNS - 3):
+            for j in range(0, self.NUM_ROWS - 3):
                 if (
-                    (self.b[i][j] == disc1)
-                    and (self.b[i + 1][j + 1] == disc2)
-                    and (self.b[i + 2][j + 2] == disc3)
-                    and (self.b[i + 3][j + 3] == disc4)
+                    (self.b[i][j] == piece1)
+                    and (self.b[i + 1][j + 1] == piece2)
+                    and (self.b[i + 2][j + 2] == piece3)
+                    and (self.b[i + 3][j + 3] == piece4)
                 ):
                     score += 1
         # north east reverse scan
-        for i in range(0, self.num_columns - 3):
-            for j in range(0, self.num_rows - 3):
+        for i in range(0, self.NUM_COLUMNS - 3):
+            for j in range(0, self.NUM_ROWS - 3):
                 if (
-                    (self.b[i + 3][j] == disc1)
-                    and (self.b[i + 2][j + 1] == disc2)
-                    and (self.b[i + 1][j + 2] == disc3)
-                    and (self.b[i][j + 3] == disc4)
+                    (self.b[i + 3][j] == piece1)
+                    and (self.b[i + 2][j + 1] == piece2)
+                    and (self.b[i + 1][j + 2] == piece3)
+                    and (self.b[i][j + 3] == piece4)
                 ):
                     score += 1
         return score
 
-    def player_score(self, two_score, three_score, four_score, disc):
-        player_score = 0
-        player_score += self.state_scanner(disc, " ", " ", " ")
-        player_score += self.state_scanner(" ", disc, " ", " ")
-        player_score += self.state_scanner(" ", " ", disc, " ")
-        player_score += self.state_scanner(" ", " ", " ", disc)
-        player_score += two_score * self.state_scanner(disc, disc, " ", " ")
-        player_score += two_score * self.state_scanner(disc, " ", disc, " ")
-        player_score += two_score * self.state_scanner(disc, " ", " ", disc)
-        player_score += two_score * self.state_scanner(" ", disc, " ", disc)
-        player_score += two_score * self.state_scanner(" ", " ", disc, disc)
-        player_score += two_score * self.state_scanner(" ", disc, disc, " ")
-        player_score += three_score * self.state_scanner(disc, disc, disc, " ")
-        player_score += three_score * self.state_scanner(disc, disc, " ", disc)
-        player_score += three_score * self.state_scanner(disc, " ", disc, disc)
-        player_score += three_score * self.state_scanner(" ", disc, disc, disc)
-        player_score += four_score * self.state_scanner(disc, disc, disc, disc)
-        return player_score
+    def player_score(self, piece, two_score, three_score, four_score):
+        score = 0
+        score += self.state_scanner(piece, " ", " ", " ")
+        score += self.state_scanner(" ", piece, " ", " ")
+        score += self.state_scanner(" ", " ", piece, " ")
+        score += self.state_scanner(" ", " ", " ", piece)
+        score += two_score * self.state_scanner(piece, piece, " ", " ")
+        score += two_score * self.state_scanner(piece, " ", piece, " ")
+        score += two_score * self.state_scanner(piece, " ", " ", piece)
+        score += two_score * self.state_scanner(" ", piece, " ", piece)
+        score += two_score * self.state_scanner(" ", " ", piece, piece)
+        score += two_score * self.state_scanner(" ", piece, piece, " ")
+        score += three_score * self.state_scanner(piece, piece, piece, " ")
+        score += three_score * self.state_scanner(piece, piece, " ", piece)
+        score += three_score * self.state_scanner(piece, " ", piece, piece)
+        score += three_score * self.state_scanner(" ", piece, piece, piece)
+        score += four_score * self.state_scanner(piece, piece, piece, piece)
+        return score
 
-    def check_for_win(self, player_disc):
-        if self.state_scanner(player_disc, player_disc, player_disc, player_disc) > 0:
+    def check_for_win(self, player_piece: str):
+        if (
+            self.state_scanner(player_piece, player_piece, player_piece, player_piece)
+            > 0
+        ):
             return True
         else:
             return False
