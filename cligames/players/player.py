@@ -1,7 +1,7 @@
 class Player:
-    def __init__(self, disc, opponent_disc):
-        self.disc = disc
-        self.opponent_disc = opponent_disc
+    def __init__(self, piece, opponent_piece):
+        self.piece = piece
+        self.opponent_piece = opponent_piece
 
     def move(self, board):
         raise NotImplementedError
