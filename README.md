@@ -24,11 +24,8 @@ $ pip install .
 ```
 
 ## How to play
-```
-$ cligames
-```
 
-### Connect4
+#### Connect4
 
 To start a game of Connect4 against the computer, enter:
 ```
@@ -93,7 +90,7 @@ Decision time: 1.437 seconds
 Player X - choose a move: 
 ```
 
-### Tic-tac-toe
+#### Tic-tac-toe
 
 To start a game of Tic-tac-toe against the computer, enter:
 ```
