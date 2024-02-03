@@ -1,11 +1,9 @@
 # `cligames`
 
 ## Board games in your terminal
-Text-based versions of Connect4 and Tic-tac-toe.
-
-The program also contains a computer player, implemented using the minimax algorithm (with alpha–beta pruning).
-
-Each board game can be played as human versus human, human versus computer or computer versus computer.
+* Connect4 and Tic-tac-toe with a text-based interface.
+* Playable computer opponent, implemented using the minimax algorithm (with alpha–beta pruning).
+* Each board game can be played as human versus human, human versus computer or computer versus computer.
 
 ## Setup
 
